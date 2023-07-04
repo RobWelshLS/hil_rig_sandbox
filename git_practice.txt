@@ -1,2 +1,2 @@
-This is a temporary file to practice git.
+This is a temporary file to practice git. Modification before 2nd merge.
 This line added in the 7_4_1 branch.
