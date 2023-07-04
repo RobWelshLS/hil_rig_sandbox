@@ -1,4 +1,4 @@
 This is a temporary file to practice git. Modification before 2nd merge.
 This line added in the 7_4_1 branch.
 Added this 3rd line in 7_4_1 after the initial merge.
-This line was modified in main after the 7_4_2 commit.
+This line was modified in main after the 7_4_2 commit. And it is the one I kept.
