@@ -1,0 +1,64 @@
+define MAX_NUM_BASELINE_INPUTS: 10
+define MAX_NUM_OPTION_CARD_CHAN: 4          // For a given option card, this is the maximum number of INPUTS it can have
+define MAX_NUM_OPTION_CARD_SLOTS: 4
+define MAX_OPTION_CARD_SETTING_SIZE: 160 // sizeof(struct) * 4/3 for B64 encoding
+
+// 10 total input designators are on every 346
+enum InputDes: {A, B, C1, C2, C3, C4, D1, D2, D3, D4, LAST}
+// There are a max of 6 cards on any given 346
+enum CardNumber: {optE, optF, optG, optH, LAST}
+// There are a max of 4 channels on any given card
+enum InputChannelNumber: {n1, n2, n3, n4, LAST}
+
+enum SensorType: {DISABLED, DIODE, PLAT_RTD, NTC_RTD, LAST}
+enum DiodeRange: {r2pt5, LAST}
+enum PTCRange: {r10, r100, r1K, LAST}
+enum NTCRange: {r100, r300, r1K, r3K, r10K, r30K, r100K, LAST}
+enum InputReadingStatus: {VALID, SOVER, SUNDER, LAST}
+
+// This contains the setup information for any measurement input
+class InputSetup:
+{
+    Sensor: SensorType,
+    Autorange: bool,
+    Range: int32_t,       // Integer range value means something different depending on sensor type
+    Compensation: bool,
+    VI_toggle: bool       // True = broken wire checks run in the background
+}
+// The following input settings are separate, because they don't have dependencies on each other and can be set independetly by the user
+setting InputA:  InputSetup
+setting InputB:  InputSetup
+setting InputC1: InputSetup
+setting InputC2: InputSetup
+setting InputC3: InputSetup
+setting InputC4: InputSetup
+setting InputD1: InputSetup
+setting InputD2: InputSetup
+setting InputD3: InputSetup
+setting InputD4: InputSetup
+
+class OptionCardSetting: 
+{
+    Card: CardNumber,
+    Setting: char[MAX_OPTION_CARD_SETTING_SIZE]
+}
+setting OptionESetup: OptionCardSetting
+setting OptionFSetup: OptionCardSetting
+setting OptionGSetup: OptionCardSetting
+setting OptionHSetup: OptionCardSetting
+
+// This is the data struct that holds information for the scanner card (NOT USED AS INSTANTIATED SETTING, JUST FOR DECLAIRATION)
+class ScannerCardSetting:
+{
+    Setting: InputSetup[MAX_NUM_OPTION_CARD_CHAN]
+}
+
+
+//class InputReading:
+//{
+//   SensorReading: double,
+//    NewReading: bool,
+//    Status: InputReadingStatus,
+//    VI_Swap: bool              //True = I src fed to V meas pins and V meas lines fed to I src pins. False = normal routing.
+//}
+//setting InputReadings: InputReading[MAX_NUM_DEDICATED_INPUTS]

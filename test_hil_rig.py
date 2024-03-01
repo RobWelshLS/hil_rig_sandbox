@@ -12,6 +12,11 @@ def clear_rig():
     rig.shorts.clear()
     rig.crossbar.clear()
     rig.voltage_source.clear()
+    yield
+    rig.load_bank.clear()
+    rig.shorts.clear()
+    rig.crossbar.clear()
+    rig.voltage_source.clear()
 
 
 # Set test variables
@@ -51,6 +56,7 @@ class TestHilRig(HILTestCase):
         load = 1E3
         rig.load_bank.apply(load)
         excitation_current = 0.005
+        sleep(standard_settle_time)
         measured_resistance = rig.measure_resistance(excitation_current=excitation_current,
                                                      settle_time=standard_settle_time)
         self.assertWithinSpec(measured_resistance, load, gain_spec=resistance_gain_error_spec,
@@ -60,6 +66,7 @@ class TestHilRig(HILTestCase):
         """Short the dut port the dmm is connected to and measure resistance. Use Row A"""
         rig.crossbar.connect([dmm_connection.front_in, rig.current_source, rig.voltage_input[0]])
         rig.shorts.close(dmm_connection.front_in)
+        sleep(standard_settle_time)
         measured_resistance = rig.measure_resistance(excitation_current=0.010, settle_time=standard_settle_time)
         self.assertWithinSpec(measured_resistance, 0, gain_spec=0,
                               offset_spec=resistance_offset_spec)

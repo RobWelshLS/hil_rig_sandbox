@@ -1,0 +1,4 @@
+command CalPgm // Causes microcontroller to reset in bootloader mode
+command Reset // Causes micro to reset itself
+command Start // Start sending unsolicited data
+command Stop // Stop sending unsolicited data
