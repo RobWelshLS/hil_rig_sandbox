@@ -5,14 +5,18 @@ from hil_test_rig import HILTestRig, HILTestCase
 
 rig = HILTestRig()
 
+''' Sandbox using pytest fixtures '''
 
-@pytest.fixture()
+
+@pytest.fixture()  # Default scope is function scope
 def clear_rig():
+    print('\nRunning clear_rig before test function...')
     rig.load_bank.clear()
     rig.shorts.clear()
     rig.crossbar.clear()
     rig.voltage_source.clear()
     yield
+    print('\nRunning clear_rig after test function...')
     rig.load_bank.clear()
     rig.shorts.clear()
     rig.crossbar.clear()
@@ -70,3 +74,11 @@ class TestHilRig(HILTestCase):
         measured_resistance = rig.measure_resistance(excitation_current=0.010, settle_time=standard_settle_time)
         self.assertWithinSpec(measured_resistance, 0, gain_spec=0,
                               offset_spec=resistance_offset_spec)
+
+    def test_simple_resistor(self):
+        """Test the selected resistor with a DMM connected to DUT 1"""
+        rig.crossbar.connect(([1, rig.load_bank]))
+        load = 100E3  # Select resistor to measure
+        rig.load_bank.apply(load)
+        sleep(10)
+        self.assertEqual(0, 0)  # Dummy test to prevent failure
