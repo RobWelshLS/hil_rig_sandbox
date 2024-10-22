@@ -2,7 +2,8 @@ from time import sleep
 from enum import IntEnum
 from hil_test_rig import HILTestRig, HILTestCase
 
-#  Modified self_test to add additional test setup, test all switches, and all resistors.
+#  Modified self_test to add additional test setup, test all switches except for UR13-UR16 (which are not
+#  used), and all resistors.
 
 rig = HILTestRig()
 
@@ -34,6 +35,8 @@ def tearDownModule():
 
 class TestVoltageLoopBack(HILTestCase):
     def test_voltage_loop_back(self):
+        """Tests a range of voltages output from the voltage source and measured on both voltage inputs.
+        Tests repeated on all rows. Switches tested: A13-A15, B13-B15, C13-C15, D13-D15"""
         for channel in range(2):
             for row in range(4):
                 nets = [[]] * 4
@@ -52,7 +55,8 @@ class TestVoltageLoopBack(HILTestCase):
 
 class TestLoads(HILTestCase):
     def test_low_resistance_loads(self):
-        """Measure test loads less than 10 KOhm using the onboard resistance measure function"""
+        """Measure test loads less than 10 KOhm using the onboard resistance measure function. Tests repeated
+        on all rows. Switches tested: A13, A16, A17, B13, B16, B17, C13, C16, C17, D13, D16, D17, UR1-UR9"""
         for row in range(4):
             nets = [[]] * 4
             nets[row] = [rig.load_bank, rig.current_source, rig.voltage_input[0]]
@@ -72,7 +76,7 @@ class TestLoads(HILTestCase):
 
     def test_high_resistance_loads(self):
         """Measure test loads 10 KOhm and up using an external ohmmeter. This is a manual test that requires the
-         operator to enter the resistance value"""
+         operator to enter the resistance value. Switches tested: A1, A17, UR10-UR12"""
 
         input('\n\nAttach an ohmmeter to DUT 1 then press Enter... ')
         rig.crossbar.connect([ohmmeter_connection.ohmmeter, rig.load_bank])
@@ -92,6 +96,9 @@ class TestLoads(HILTestCase):
 
 class TestSwitches(HILTestCase):
     def test_crossbar_continuity(self):
+        """For each row on page 1 of the schematics, connect the voltage source to Row A and measure the test voltage
+        on Rows B-D. Repeat for each column. Switches tested: UA1-UA12, UB1-UB12, UC1-UC12, UD1-UD12, UA13, UA15,
+        UB13, UC13, UD13"""
         test_voltage = 1
         rig.voltage_source.apply_dc(test_voltage)
 
@@ -110,6 +117,8 @@ class TestSwitches(HILTestCase):
                                       offset_spec=voltage_offset_spec)
 
     def test_shorts(self):
+        """Connect Row A, Switch 1 and DUT 1 short to the current source and voltage input. Verify short switch.
+        Repeat for each column. Switches tested: UA1-UA12, U101-U112, UA13, UA16"""
         for dut_port in range(1, 13):
             rig.shorts.clear()
             rig.crossbar.connect([dut_port, rig.current_source, rig.voltage_input[0]])
