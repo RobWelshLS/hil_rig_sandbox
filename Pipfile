@@ -1,0 +1,39 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[[source]]
+url = "https://VssSessionToken@pkgs.dev.azure.com/lakeshorecryotronics/_packaging/LakeShoreInternalPythonPackages/pypi/simple/"
+verify_ssl = true
+name = "pkgsdevazure"
+
+[packages]
+pytest = "*"
+click = "*"
+colorama = "*"
+contourpy = "*"
+cycler = "*"
+fonttools = "*"
+iniconfig = "*"
+Jinja2 = "*"
+kiwisolver = "*"
+MarkupSafe = "*"
+matplotlib = "*"
+numpy = "*"
+packaging = "*"
+pillow = "*"
+pluggy = "*"
+ply = "*"
+pyparsing = "*"
+pyserial = "*"
+python-dateutil = "*"
+six = "*"
+hil-test-rig = {version = "*", index = "pkgsdevazure"}
+lscp = {version = "*", index = "pkgsdevazure"}
+lscpgen = {version = "*", index = "pkgsdevazure"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"

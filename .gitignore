@@ -2,5 +2,4 @@
 .idea/
 __pycache__/
 /venv
-Pipfile
 Pipfile.lock
